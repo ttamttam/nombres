@@ -1,7 +1,7 @@
 (lang dune 2.0)
 
 (generate_opam_files true)
-
+(name nombres)
 (package
   (name nombres)
   (description
