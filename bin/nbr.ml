@@ -4,7 +4,7 @@ let rec parse_and_print () =
   input_line stdin |> function
   | "q" | "Q" -> ()
   | "h" | "?" | "H" ->
-      print_endline "Je n'accepte que des entiers. 'q' ou 'Q' pour quitter.";
+      print_endline "Je n'accepte que des entiers positifs. Et pas trop grands…\n'q' ou 'Q' pour quitter.";
       flush stdout;
       parse_and_print ()
   | str ->
