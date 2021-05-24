@@ -31,19 +31,20 @@ jobs:
 
       - run: opam exec -- dune build
       
-      - name: Upload artifact
+      - name: Upload a Windows Build Artifact
         uses: actions/upload-artifact@v2.2.3
+        if: runner.os == 'Windows'
         with:
-            name: |
-              if [ "$RUNNER_OS" == "Windows" ]; then
-                  echo "nbr-win"
-              else
-                 echo "nbr-lin"
-              fi
-            path: |
-              if [ "$RUNNER_OS" == "Windows" ]; then
-                  "_build/install/default/bin/nbr.exe"
-              else
-                  "_build/install/default/bin/nbr"
-              fi
+            name: nbr-win32
+            # A file, directory or wildcard pattern that describes what to upload
+            path: _build/install/default/bin/nbr.exe
+            retention-days: 1
+            
+      - name: Upload a Linux Build Artifact
+        uses: actions/upload-artifact@v2.2.3
+        if: runner.os == 'Linux'
+        with:
+            name: nbr-linux
+            # A file, directory or wildcard pattern that describes what to upload
+            path: _build/install/default/bin/nbr
             retention-days: 1
