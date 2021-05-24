@@ -1,5 +1,5 @@
 let rec parse_and_print () =
-  print_string "Entier ? > ";
+  print_string "Entier (Ou [Q]uitter [H]elp) ? > ";
   flush stdout;
   input_line stdin |> function
   | "q" | "Q" -> ()

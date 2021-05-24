@@ -45,12 +45,12 @@ and jusqua_100 dizaine n =
 and jusqua_1000 n =
   let centaine = n / 100 and reste = n mod 100 in
   let cent = if centaine > 1 && reste = 0 then "cents" else "cent" in
-  ( (if centaine = 1 then [ cent ] else [ nombre_of_int centaine; cent ])
-  @ if reste = 0 then [] else [ nombre_of_int reste ] )
+  ((if centaine = 1 then [ cent ] else [ nombre_of_int centaine; cent ])
+  @ if reste = 0 then [] else [ nombre_of_int reste ])
   |> String.concat " "
 
 and jusqua_1000000 n =
   let milliers = n / 1000 and reste = n mod 1000 in
-  ( (if milliers = 1 then [ "mille" ] else [ nombre_of_int milliers; "mille" ])
-  @ if reste = 0 then [] else [ nombre_of_int reste ] )
+  ((if milliers = 1 then [ "mille" ] else [ nombre_of_int milliers; "mille" ])
+  @ if reste = 0 then [] else [ nombre_of_int reste ])
   |> String.concat " "
