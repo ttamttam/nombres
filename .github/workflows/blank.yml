@@ -11,7 +11,6 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - macos-latest
           - ubuntu-latest
           - windows-latest
         ocaml-compiler:
@@ -31,3 +30,22 @@ jobs:
       - run: opam install . --deps-only
 
       - run: opam exec -- dune build
+      
+      - name: Upload a Windows Build Artifact
+        uses: actions/upload-artifact@v2.2.3
+        if: runner.os == 'Windows'
+        with:
+            name: nbr-win32.exe
+            # A file, directory or wildcard pattern that describes what to upload
+            path: _build/install/default/bin/nbr.exe
+            retention-days: 1
+            
+      - name: Upload a Linux Build Artifact
+        uses: actions/upload-artifact@v2.2.3
+        if: runner.os == 'Linux'
+        with:
+            name: nbr-linux.exe
+            # A file, directory or wildcard pattern that describes what to upload
+            path: _build/install/default/bin/nbr.exe
+            retention-days: 1
+      
