@@ -42,8 +42,8 @@ jobs:
               fi
             path: |
               if [ "$RUNNER_OS" == "Windows" ]; then
-                  echo "_build/install/default/bin/nbr.exe"
+                  "_build/install/default/bin/nbr.exe"
               else
-                  echo "_build/install/default/bin/nbr"
+                  "_build/install/default/bin/nbr"
               fi
             retention-days: 1
