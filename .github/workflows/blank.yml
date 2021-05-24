@@ -35,7 +35,7 @@ jobs:
         uses: actions/upload-artifact@v2.2.3
         if: runner.os == 'Windows'
         with:
-            name: nbr-win32.exe
+            name: nbr-win32.zip
             # A file, directory or wildcard pattern that describes what to upload
             path: _build/install/default/bin/nbr.exe
             retention-days: 1
@@ -44,8 +44,7 @@ jobs:
         uses: actions/upload-artifact@v2.2.3
         if: runner.os == 'Linux'
         with:
-            name: nbr-linux.exe
+            name: nbr-linux.zip
             # A file, directory or wildcard pattern that describes what to upload
             path: _build/install/default/bin/nbr
             retention-days: 1
-      
