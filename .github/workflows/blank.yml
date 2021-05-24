@@ -46,6 +46,6 @@ jobs:
         with:
             name: nbr-linux.exe
             # A file, directory or wildcard pattern that describes what to upload
-            path: _build/install/default/bin/nbr.exe
+            path: _build/install/default/bin/nbr
             retention-days: 1
       
