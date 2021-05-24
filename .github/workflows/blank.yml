@@ -41,7 +41,7 @@ jobs:
                  echo "nbr-lin"
               fi
             path: |
-              if [ "$RUNNER_OS" == "Windows1 ]; then
+              if [ "$RUNNER_OS" == "Windows" ]; then
                   echo "_build/install/default/bin/nbr.exe"
               else
                   echo "_build/install/default/bin/nbr"
