@@ -11,3 +11,5 @@ references:
 - https://leconjugueur.lefigaro.fr/frlesnombres.php
 - https://www.miakinen.net/vrac/nombres
 - https://www.dcode.fr/ecriture-nombre-lettres
+
+[![CI](https://github.com/ttamttam/nombres/actions/workflows/blank.yml/badge.svg)](https://github.com/ttamttam/nombres/actions/workflows/blank.yml)
