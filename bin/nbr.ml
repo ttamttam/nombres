@@ -4,14 +4,16 @@ let rec parse_and_print () =
   input_line stdin |> function
   | "q" | "Q" -> ()
   | "h" | "?" | "H" ->
-      print_endline "Je n'accepte que des entiers positifs. Et pas trop grands…\n'q' ou 'Q' pour quitter.";
+      print_endline
+        "Je n'accepte que des entiers positifs. Et pas trop grands…\n\
+         'q' ou 'Q' pour quitter.";
       flush stdout;
       parse_and_print ()
   | str ->
       str |> int_of_string
       |> (fun i ->
            match i with
-           | i -> i |> Nombres.nombre_of_int |> print_endline
+           | i -> i |> Nombres.nombre |> print_endline
            | exception _ -> ())
       |> parse_and_print
 

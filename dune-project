@@ -1,11 +1,19 @@
-(lang dune 2.8)
+(lang dune 3.0)
+(name nombres)
+(version 0.9)
 
 (generate_opam_files true)
-(name nombres)
+
+(source (github ttamttam/nombres))
+(license ISC)
+(authors "Matthieu Dubuget")
+(maintainers "matthieu.dubuget@gmail.com")
+
 (package
-  (name nombres)
+ (name nombres)
+  (synopsis "Conversion of integers to french.")
   (description
-"\| Convert ints into french.
+"\| Convert integers into french.
 "\|
 "\| Some references:
 "\| - https://leconjugueur.lefigaro.fr/frlesnombres.php

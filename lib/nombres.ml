@@ -1,56 +1,188 @@
-let rec nombre_of_int = function
-  | 0 -> "zéro"
-  | 1 -> "un"
-  | 2 -> "deux"
-  | 3 -> "trois"
-  | 4 -> "quatre"
-  | 5 -> "cinq"
-  | 6 -> "six"
-  | 7 -> "sept"
-  | 8 -> "huit"
-  | 9 -> "neuf"
-  | 10 -> "dix"
-  | 11 -> "onze"
-  | 12 -> "douze"
-  | 13 -> "treize"
-  | 14 -> "quatorze"
-  | 15 -> "quinze"
-  | 16 -> "seize"
-  | 20 -> "vingt"
-  | 30 -> "trente"
-  | 40 -> "quarante"
-  | 50 -> "cinquante"
-  | 60 -> "soixante"
-  | 80 -> "quatre-vingts"
-  | 100 -> "cent"
-  | 1000 -> "mille"
-  | n when n < 70 -> jusqua_70 n
-  | n when n < 80 -> jusqua_100 "soixante" n
-  | n when n < 100 -> jusqua_100 "quatre-vingt" n
-  | n when n < 1_000 -> jusqua_1000 n
-  | n when n < 1_000_000 -> jusqua_1000000 n
-  | _ -> "--------------------"
+type options =
+  | Septante
+  | Huitante
+  | Nonante
+  | Belgique (* Septante Nonante *)
+  | VVF (* Septante Huitante Nonante *)
 
-and jusqua_70 n =
-  let dizaine = nombre_of_int (n / 10 * 10) in
-  let unite = n mod 10 in
-  [ dizaine; nombre_of_int unite ]
-  |> String.concat (if unite = 1 then " et " else "-")
+let int_of_options = function
+  | Septante -> 0x1
+  | Huitante -> 0x2
+  | Nonante -> 0x8
+  | Belgique -> 0x1 lor 0x8
+  | VVF -> 0x1 lor 0x2 lor 0x8
 
-and jusqua_100 dizaine n =
-  let unite = n mod 10 in
-  [ dizaine; nombre_of_int (n mod 20) ]
-  |> String.concat (if unite = 1 && n < 80 then " et " else "-")
+type mode = [ `Belgique | `VVF | `France ]
 
-and jusqua_1000 n =
-  let centaine = n / 100 and reste = n mod 100 in
-  let cent = if centaine > 1 && reste = 0 then "cents" else "cent" in
-  ((if centaine = 1 then [ cent ] else [ nombre_of_int centaine; cent ])
-  @ if reste = 0 then [] else [ nombre_of_int reste ])
-  |> String.concat " "
+let options_of_mode = function
+  | `Belgique -> [ Belgique ]
+  | `VVF -> [ VVF ]
+  | `France -> []
 
-and jusqua_1000000 n =
-  let milliers = n / 1000 and reste = n mod 1000 in
-  ((if milliers = 1 then [ "mille" ] else [ nombre_of_int milliers; "mille" ])
-  @ if reste = 0 then [] else [ nombre_of_int reste ])
-  |> String.concat " "
+let int_of_mode m =
+  m |> options_of_mode |> List.map int_of_options
+  |> ListLabels.fold_left ~f:( + ) ~init:0
+
+let mode_of_int = function
+  | 0 -> `France
+  | 1 -> `Belgique
+  | 2 -> `VVF
+  | _ -> assert false
+
+let opts options lst = List.exists (fun opt -> List.mem opt options) lst
+
+let nombre ?(options = []) n =
+  let has_opts = opts options in
+  if n = min_int then invalid_arg "Nombre hors domaine"
+  else
+    (* if debug then Fmt.pr "@[<v 2>nombre %d:@," n; *)
+    let rec schu =
+      [|
+        "";
+        "un";
+        "deux";
+        "trois";
+        "quatre";
+        "cinq";
+        "six";
+        "sept";
+        "huit";
+        "neuf";
+        "dix";
+        "onze";
+        "douze";
+        "treize";
+        "quatorze";
+        "quinze";
+        "seize";
+      |]
+    and schd =
+      [|
+        "";
+        "dix";
+        "vingt";
+        "trente";
+        "quarante";
+        "cinquante";
+        "soixante";
+        "soixante";
+      |]
+    and nombre_of_int ?(singular = false) ?(accu = []) current () =
+      match current with
+      | 0 ->
+          if accu <> [] then accu |> List.rev |> String.concat " "
+          else "zéro"
+      | n when n < 0 -> nombre_of_int ~accu (-n) ()
+      | n when n < 17 -> unroll (schu.(n) :: accu)
+      | n when n mod 10 = 0 && n < 61 -> unroll (schd.(n / 10) :: accu)
+      | 80 ->
+          let nom, noms =
+            if has_opts [ Huitante; VVF ] then ("huitante", "huitante")
+            else ("quatre-vingt", "quatre-vingts")
+          in
+          unroll ((if singular then nom else noms) :: accu)
+      | 100 -> unroll ("cent" :: accu)
+      | 1000 -> unroll ("mille" :: accu)
+      | n when n < 70 ->
+          let dizaines = nombre_of_int (n / 10 * 10) () in
+          let unites = n mod 10 in
+          let accu =
+            ([
+               dizaines;
+               (if unites = 1 then " et " else "-");
+               nombre_of_int unites ();
+             ]
+            |> String.concat "")
+            :: accu
+          in
+          unroll accu
+      | n when n < 80 ->
+          let unites = n mod 10 in
+          let accu =
+            if has_opts [ Septante; Belgique; VVF ] then
+              ([
+                 (if n < 70 then "soixante" else "septante");
+                 (if unites = 1 && n < 80 then " et "
+                 else if unites > 0 then "-"
+                 else "");
+                 (if unites > 0 then nombre_of_int unites () else "");
+               ]
+              |> String.concat "")
+              :: accu
+            else
+              ([
+                 "soixante";
+                 (if unites = 1 && n < 80 then " et " else "-");
+                 nombre_of_int (n mod 20) ();
+               ]
+              |> String.concat "")
+              :: accu
+          in
+          unroll accu
+      | n when n < 100 ->
+          let unites = n mod 10 in
+          let accu =
+            if has_opts [ Huitante; VVF ] && n < 90 then
+              ([
+                 "huitante";
+                 (if unites = 1 then " et " else if unites > 0 then "-" else "");
+                 (if unites > 0 then nombre_of_int unites () else "");
+               ]
+              |> String.concat "")
+              :: accu
+            else if has_opts [ Nonante; VVF; Belgique ] && n >= 90 then
+              ([
+                 "nonante";
+                 (if unites = 1 then " et " else if unites > 0 then "-" else "");
+                 (if unites > 0 then nombre_of_int unites () else "");
+               ]
+              |> String.concat "")
+              :: accu
+            else
+              ([
+                 "quatre-vingt";
+                 (if unites = 1 && n < 80 then " et " else "-");
+                 nombre_of_int (n mod 20) ();
+               ]
+              |> String.concat "")
+              :: accu
+          in
+          unroll accu
+      | n when n < 1_000 -> jusqua_x ~singular accu 100 ~nom:"cent" ~un:false n
+      | n when n < 1_000_000 -> jusqua_x accu 1000 ~nom:"mille" ~un:false n
+      | n when n < 1_000_000_000 ->
+          jusqua_x accu 1_000_000 ~nom:"million" ~un:true n
+      | n when n < 1_000_000_000_000 ->
+          jusqua_x accu 1_000_000_000 ~nom:"milliard" ~un:true n
+      | n when n < 1_000_000_000_000_000 ->
+          jusqua_x accu 1_000_000_000_000 ~nom:"billion" ~un:true n
+      | n when n < 1_000_000_000_000_000_000 ->
+          jusqua_x accu 1_000_000_000_000_000 ~nom:"billiard" ~un:true n
+      | n when n <= max_int ->
+          jusqua_x accu 1_000_000_000_000_000_000 ~nom:"trillion" ~un:true n
+      | _ -> assert false
+    and unroll accu = List.rev accu |> String.concat " "
+    and jusqua_x ?(singular = false) accu lim ~nom ~un n =
+      let un = if un then "un" else "" in
+      let noms =
+        match (nom, singular) with
+        | "mille", _ -> "mille"
+        | nom, true -> nom
+        | nom, false -> nom ^ "s"
+      in
+      let count = n / lim and reste = n mod lim in
+
+      let accu =
+        match count with
+        | 1 -> nom :: un :: accu |> List.filter (( <> ) "")
+        | _ ->
+            let noms = if lim = 100 && reste <> 0 then nom else noms in
+            noms
+            :: nombre_of_int ~singular:(singular || lim = 1000) count ()
+            :: accu
+      in
+
+      nombre_of_int ~singular ~accu reste ()
+    in
+
+    nombre_of_int n ()

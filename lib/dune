@@ -1,2 +1,4 @@
 (library
- (name nombres))
+ (name nombres)
+ (public_name nombres)
+ (libraries fmt))
