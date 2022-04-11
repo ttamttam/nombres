@@ -1,4 +1,8 @@
 (library
  (name nombres)
  (public_name nombres)
- (libraries fmt))
+ (libraries fmt)
+ (inline_tests
+  (backend qtest.lib)
+  (executable
+   (flags :standard -warn-error -a -w -33))))

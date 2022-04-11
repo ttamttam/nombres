@@ -5,29 +5,29 @@ type options =
   | Belgique (* Septante Nonante *)
   | VVF (* Septante Huitante Nonante *)
 
-let int_of_options = function
-  | Septante -> 0x1
-  | Huitante -> 0x2
-  | Nonante -> 0x8
-  | Belgique -> 0x1 lor 0x8
-  | VVF -> 0x1 lor 0x2 lor 0x8
+(* let int_of_options = function *)
+(*   | Septante -> 0x1 *)
+(*   | Huitante -> 0x2 *)
+(*   | Nonante -> 0x8 *)
+(*   | Belgique -> 0x1 lor 0x8 *)
+(*   | VVF -> 0x1 lor 0x2 lor 0x8 *)
 
-type mode = [ `Belgique | `VVF | `France ]
+(* type mode = [ `Belgique | `VVF | `France ] *)
 
-let options_of_mode = function
-  | `Belgique -> [ Belgique ]
-  | `VVF -> [ VVF ]
-  | `France -> []
+(* let options_of_mode = function *)
+(*   | `Belgique -> [ Belgique ] *)
+(*   | `VVF -> [ VVF ] *)
+(*   | `France -> [] *)
 
-let int_of_mode m =
-  m |> options_of_mode |> List.map int_of_options
-  |> ListLabels.fold_left ~f:( + ) ~init:0
+(* let int_of_mode m = *)
+(*   m |> options_of_mode |> List.map int_of_options *)
+(*   |> ListLabels.fold_left ~f:( + ) ~init:0 *)
 
-let mode_of_int = function
-  | 0 -> `France
-  | 1 -> `Belgique
-  | 2 -> `VVF
-  | _ -> assert false
+(* let mode_of_int = function *)
+(*   | 0 -> `France *)
+(*   | 1 -> `Belgique *)
+(*   | 2 -> `VVF *)
+(*   | _ -> assert false *)
 
 let opts options lst = List.exists (fun opt -> List.mem opt options) lst
 
@@ -70,8 +70,7 @@ let nombre ?(options = []) n =
     and nombre_of_int ?(singular = false) ?(accu = []) current () =
       match current with
       | 0 ->
-          if accu <> [] then accu |> List.rev |> String.concat " "
-          else "zéro"
+          if accu <> [] then accu |> List.rev |> String.concat " " else "zéro"
       | n when n < 0 -> nombre_of_int ~accu (-n) ()
       | n when n < 17 -> unroll (schu.(n) :: accu)
       | n when n mod 10 = 0 && n < 61 -> unroll (schd.(n / 10) :: accu)
@@ -186,3 +185,40 @@ let nombre ?(options = []) n =
     in
 
     nombre_of_int n ()
+
+(*$= nombre & ~printer:(fun x -> "\"" ^ x ^ "\"")
+     "zéro"                                    (nombre 0)
+     "un"                                      (nombre 1)
+     "deux"                                    (nombre 2)
+     "trois"                                   (nombre 3)
+     "trente et un"                            (nombre 31)
+     "trente-deux"                             (nombre 32)
+     "soixante-dix"                            (nombre 70)
+     "quatre-vingts"                           (nombre 80)
+     "quatre-vingt-un"                         (nombre 81)
+     "quatre-vingt-trois"                      (nombre 83)
+     "quatre-vingt-dix"                        (nombre 90)
+     "quatre-vingt-onze"                       (nombre 91)
+     "cent"                                    (nombre 100)
+     "quatre cents"                            (nombre 400)
+     "quatre cent vingt et un"                 (nombre 421)
+     "mille"                                   (nombre 1000)
+     "mille cent"                              (nombre 1100)
+     "mille deux cents"                        (nombre 1200)
+     "mille deux cent trente"                  (nombre (-1230))
+     "mille deux cent trente"                  (nombre 1230)
+     "quatre-vingt mille"                      (nombre 80_000)
+     "deux cent mille"                         (nombre 200_000)
+     "deux cent mille trois cent quarante"     (nombre 200_340)
+     "quatre-vingts millions"                  (nombre 80_000_000)
+     "quatre-vingts millions un"               (nombre 80_000_001)
+     "deux cents millions"                     (nombre 200_000_000)
+     "deux cents millions trois cent quarante" (nombre 200_000_340)
+     "deux cents milliards"                    (nombre 200_000_000_000)
+     "deux cents billiards"                    (nombre 200_000_000_000_000_000)
+     "deux trillions"                          (nombre 2_000_000_000_000_000_000)
+     "deux trillions un"                       (nombre 2_000_000_000_000_000_001)
+     "deux trillions quatre cent mille un"     (nombre 2_000_000_000_000_400_001)
+     "deux trillions quatre cents millions un" (nombre 2_000_000_000_400_000_001)
+     "deux trillions cent billions quatre cents millions un" (nombre 2_000_100_000_400_000_001)
+*)

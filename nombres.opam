@@ -17,6 +17,8 @@ homepage: "https://github.com/ttamttam/nombres"
 bug-reports: "https://github.com/ttamttam/nombres/issues"
 depends: [
   "dune" {>= "3.0"}
+  "fmt"
+  "qtest" {with-test}
   "odoc" {with-doc}
 ]
 build: [
