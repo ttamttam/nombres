@@ -1,0 +1,93 @@
+* Simples
+  ≤ 16
+  10, 20, 30, 40, 50, 60
+  100
+  1000
+* trait union
+  < 100 : "-"
+  Mais ceux qui se terminent par 1 : " et "
+  SAUF 81 et 91
+  
+* rectif 1990
+  '-' de partout, sauf millier, millions, milliard
+
+* cent
+  invariable sauf si multiplié et final
+
+  200 000 deux cent mille
+  200 000 000 deux cents millions
+
+  (car mille = cardinal, mais millions = nom)
+
+  80 000 quatre-vingt mille
+  80 000 000 quatre-vingts millions
+  
+* Échelle longue/courte
+
+  Depuis 1961 : échelle longue en France
+
+  Échelle longue :
+  - million (6)
+  - milliard (9)
+  - billion (12)
+  - billiard (15)
+  - trillion (18)
+  - trilliard (21)
+
+  Échelle courte :
+  - million (6 = 3×2)
+  - billion (9 = 3×3)
+  - trillion (12 = 3×4)
+  - quadrillion (15 = 3×5)
+  - quintillion (18 = 3×6)
+  - sextillion (21 = 3×7)    
+ 
+* 70 80 90
+
+Belgique + Suisse : septante et nonante
+Suisse Romande (cantons de Vaud, du Valais et de Frubourg) : huitante
+
+* Accords
+
+  20 et 100 s’accordent s’ils sont multipliés sans être suivis par un autre
+  nombre
+
+  - quatre-vingts
+  - quatre-vingt-trois
+  - quatre cents
+  - quatre cent vingt et un
+  - mille cent
+  - mille deux cents
+  - mille deux cent trente
+  - deux cent mille
+  - deux cents millions
+  - deux cents milliards
+  - quatre-vingt mille
+  - quatre-vingts millions
+      
+  1000 : « mille » est invariable
+
+  « un » est invariable en nombre (mais pas en genre)
+
+  million et milliard sont des noms et non des adjectifs. Ils
+  s’accordent.
+
+  - quatre cents millions
+  - deux cent mille
+
+* Options
+
+  - rectif_1990 :
+    Seuls les noms tels que millier, million ou milliard ne sont
+    ni précédés ni suivis d'un trait d'union.
+    - vingt-et-un
+    - cent-soixante-huit
+    - cent-mille-deux-cent-cinquante-huit
+    - deux millions huit-cents
+
+  - septante, huitante, octante, nonante
+    - belgique = septante | nonante : Belgique, Suisse romande
+    - vvf = septante|huitante|nonante : Cantons de Vaud, Valais Fribourg
+    - archaique = septante| octante | nonante : Plus employé
+
+      
